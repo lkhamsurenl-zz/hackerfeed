@@ -7,20 +7,20 @@ xmlhttp.onreadystatechange = function() {
         var descriptions = parseDescriptions(JSON.parse(xmlhttp.responseText));
     }
 };
-
+// TODO(lkhamsurenl): Fix hard coded start date.
 xmlhttp.open("GET", "https://api.github.com/search/repositories?q=created:>2015-12-20&sort=stars&order=desc");
 xmlhttp.send();
 
-
-function parseDescriptions(myJson) {
-	var items = myJson.items;
+// Given a Json Object with top trends, parse and render in popup.html page.
+function parseDescriptions(jsonObj) {
 	// Get description and html_url for each entry.
 	// TODO(lkhamsurenl): Figure out a way to only add English repositories.
-	var vPool="";
-    jQuery.each(myJson.items, function(i, item) {
-    	vPool += "<a href=" + item["html_url"] + ">" + item["description"] + "</a> <br />";
+	var links = "";
+    jQuery.each(jsonObj.items, function(i, item) {
+    	links += i + ". "
+    	links += "<a href=" + item["html_url"] + ">" + item["description"] + "</a> <br />";
     });
-	
-	document.getElementById("trends").innerHTML = vPool;
+	// Display in the trends paragraph in popup.html page.
+	document.getElementById("trends").innerHTML = links;
 }
 
