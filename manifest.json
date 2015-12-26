@@ -11,7 +11,8 @@
   
   "browser_action": {
     "default_icon": "assets/flame.png",
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_title": "Top GitHub repositories created recently"
   },
 
   "permissions": [

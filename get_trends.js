@@ -1,36 +1,46 @@
-var xmlhttp = new XMLHttpRequest();
+// Format given date to YYYY-MM-DD.
+function shortFormatDate(date) {
+	day = date.getDate();
+	month = date.getMonth() + 1; // Month is 0 based.
+	year = date.getFullYear();
 
-xmlhttp.onreadystatechange = function() {
-	// if the request succeed, display the top 10 request in the console.
-	// TODO(lkhamsurenl): Change console to a HTML.
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-        var descriptions = parseDescriptions(JSON.parse(xmlhttp.responseText));
-    }
-};
-// TODO(lkhamsurenl): Fix hard coded start date.
-// Start date is a week earlier than today.
-var start_date = new Date();
-start_date.setDate(start_date.getDate() - 7);
-day = start_date.getDate();
-month = start_date.getMonth() + 1; // Month is 0 based.
-year = start_date.getFullYear();
-var short_date = year + "-" + month + "-" + day;
+	return year + "-" + month + "-" + day;
+}
 
-xmlhttp.open("GET", "https://api.github.com/search/repositories?q=created:>" + 
-	short_date + 
-	"&sort=stars&order=desc");
-xmlhttp.send();
+function subtractedDaysFromCurrent(num_days) {
+	var start_date = new Date();
+	start_date.setDate(start_date.getDate() - num_days);
+	return start_date;
+}
 
 // Given a Json Object with top trends, parse and render in popup.html page.
 function parseDescriptions(jsonObj) {
 	// Get description and html_url for each entry.
-	// TODO(lkhamsurenl): Figure out a way to only add English repositories.
+	// TODO(lkhamsurenl): Show only English repositories.
 	var links = "";
     jQuery.each(jsonObj.items, function(i, item) {
-    	links += i + ". "
+    	links += i + ". ";
     	links += "<a href=" + item["html_url"] + ">" + item["description"] + "</a> <br />";
     });
 	// Display in the trends paragraph in popup.html page.
 	document.getElementById("trends").innerHTML = links;
 }
 
+// TODO(lkhamsurenl): Cache results for one day, load when it's too old.
+var xmlhttp = new XMLHttpRequest();
+
+xmlhttp.onreadystatechange = function() {
+	// if the request succeed, display the top requests.
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        var descriptions = parseDescriptions(JSON.parse(xmlhttp.responseText));
+    }
+};
+
+// Get a date in short_format 7 days from current date.
+var short_date = shortFormatDate(subtractedDaysFromCurrent(7));
+
+// Make API call to get the top repositories created since short_date.
+xmlhttp.open("GET", "https://api.github.com/search/repositories?q=created:>" + 
+	short_date + 
+	"&sort=stars&order=desc");
+xmlhttp.send();
