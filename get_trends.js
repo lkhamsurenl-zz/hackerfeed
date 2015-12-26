@@ -8,7 +8,17 @@ xmlhttp.onreadystatechange = function() {
     }
 };
 // TODO(lkhamsurenl): Fix hard coded start date.
-xmlhttp.open("GET", "https://api.github.com/search/repositories?q=created:>2015-12-20&sort=stars&order=desc");
+// Start date is a week earlier than today.
+var start_date = new Date();
+start_date.setDate(start_date.getDate() - 7);
+day = start_date.getDate();
+month = start_date.getMonth() + 1; // Month is 0 based.
+year = start_date.getFullYear();
+var short_date = year + "-" + month + "-" + day;
+
+xmlhttp.open("GET", "https://api.github.com/search/repositories?q=created:>" + 
+	short_date + 
+	"&sort=stars&order=desc");
 xmlhttp.send();
 
 // Given a Json Object with top trends, parse and render in popup.html page.
