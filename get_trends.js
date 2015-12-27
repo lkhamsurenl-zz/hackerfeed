@@ -32,7 +32,7 @@ var xmlhttp = new XMLHttpRequest();
 xmlhttp.onreadystatechange = function() {
 	// if the request succeed, display the top requests.
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-        var descriptions = parseDescriptions(JSON.parse(xmlhttp.responseText));
+        parseDescriptions(JSON.parse(xmlhttp.responseText));
     }
 };
 
