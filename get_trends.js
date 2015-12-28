@@ -19,8 +19,14 @@ function parseDescriptions(jsonObj) {
 	// TODO(lkhamsurenl): Show only English repositories.
 	var links = "";
     jQuery.each(jsonObj.items, function(i, item) {
+    	url = item["html_url"];
+    	description = item["description"];
+    	// If no description is given, show the name.
+    	if (description == "") {
+    		description = item["name"];
+    	}
     	links += i + ". ";
-    	links += "<a href=" + item["html_url"] + ">" + item["description"] + "</a> <br />";
+    	links += "<a href=" + url + ">" + description + "</a> <br />";
     });
 	// Display in the trends paragraph in popup.html page.
 	document.getElementById("trends").innerHTML = links;
