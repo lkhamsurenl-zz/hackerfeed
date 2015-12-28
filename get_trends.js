@@ -21,12 +21,15 @@ function parseDescriptions(jsonObj) {
     jQuery.each(jsonObj.items, function(i, item) {
     	url = item["html_url"];
     	description = item["description"];
+    	language = item["language"];
     	// If no description is given, show the name.
     	if (description == "") {
     		description = item["name"];
     	}
     	links += i + ". ";
-    	links += "<a href=" + url + ">" + description + "</a> <br />";
+    	links += "<a href=" + url + ">" + 
+    			 description + "</a>"  + 
+    			 " [" + language + "] <br />";
     });
 	// Display in the trends paragraph in popup.html page.
 	document.getElementById("trends").innerHTML = links;
