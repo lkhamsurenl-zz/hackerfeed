@@ -22,6 +22,7 @@ function parseDescriptions(title, jsonObj, limit) {
 	// Get description and html_url for each entry.
 	// TODO(lkhamsurenl): Show only English repositories.
 	var links = "<center><h3>" + title + "</h3></center>";
+    links += "<ul>";
     jQuery.each(jsonObj.items.slice(0, limit), function(i, item) {
     	url = item["html_url"];
     	description = item["description"];
@@ -30,11 +31,11 @@ function parseDescriptions(title, jsonObj, limit) {
     	if (description == "") {
     		description = item["name"];
     	}
-    	links += i + ". ";
-    	links += "<a href=" + url + ">" + 
+    	links += "<li><a href=" + url + ">" + 
     			 description + "</a>"  + 
-    			 " [" + language + "] <br />";
+    			 " [" + language + "] </li>";
     });
+    links += "</ul>";
 	// Display in the trends paragraph in popup.html page.
 	document.getElementById("trends").innerHTML += links;
 }
