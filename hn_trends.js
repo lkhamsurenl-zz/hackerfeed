@@ -1,21 +1,31 @@
 // Given items, display items in popup.html.
-function render(item) {
-    url = item["url"];
-    title = item["title"];
-    link = "<a href=" + url + ">" + 
-        title + "</a> <br />";
-    // Display in the trends paragraph in popup.html page.
-    document.getElementById("trends").innerHTML += link;
+function render(items) {
+    var links = "<center><h3>HN</h3></center>";
+    links += "<ul>"
+    jQuery.each(items, function(i, item) {
+        console.log(item);
+        // Resolve undefined url by displaying the story in ycombinator website.
+        url = item["url"] == "" || typeof item["url"] === "undefined" ? 
+            ("https://news.ycombinator.com/item?id=" + item["id"]) :
+            item["url"];
+        title = item["title"];
+        links += "<li><a href=" + url + ">" + 
+                 title + "</a> </li>";
+    });
+    links += "</ul>"
+
+    document.getElementById("trends").innerHTML += links;
 }
 
-function getStory(id) {
+// get story for an individual item based on the id, then callback.
+function getStory(id, callback) {
     var xmlhttp = new XMLHttpRequest();
 
     xmlhttp.onreadystatechange = function() {
         // if the request succeed, add the json value to the desc_items list.
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText);
-            render(obj);
+            callback(obj);
         }
     };
     xmlhttp.open("GET", "https://hacker-news.firebaseio.com/v0/item/" + 
@@ -24,11 +34,16 @@ function getStory(id) {
     xmlhttp.send();
 }
 
-// Get only top limit # of stories from jsonObj.
-function limitTopStories(items, limit) {
-    var limited_items = items.slice(0, limit);
-    for (i = 0; i < limited_items.length; i++) {
-        getStory(items[i]);
+function topStories(items) {
+    var stories = [];
+    for (i = 0; i < items.length; i++) {
+        getStory(items[i], function(obj){
+            // given a obj, it pushes it inot the value before rendering.
+            stories.push(obj);
+            if (stories.length == items.length) {
+                render(stories);
+            } 
+        });
     }
 }
 
@@ -40,12 +55,11 @@ function callAPI(limit) {
         // if the request succeed, display the top requests.
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             // Display in the trends paragraph in popup.html page.
-            document.getElementById("trends").innerHTML += "<center><h3>HN</h3></center>";
-            limitTopStories(JSON.parse(xmlhttp.responseText), limit)
+            topStories(JSON.parse(xmlhttp.responseText).slice(0, limit));
         }
     };
     
-    xmlhttp.open("GET", "https://hacker-news.firebaseio.com/v0/newstories.json");
+    xmlhttp.open("GET", "https://hacker-news.firebaseio.com/v0/topstories.json");
     xmlhttp.send();
 }
 
