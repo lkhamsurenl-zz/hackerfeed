@@ -9,8 +9,11 @@ function render(items) {
             ("https://news.ycombinator.com/item?id=" + item["id"]) :
             item["url"];
         title = item["title"];
+        score = item["score"]
         links += "<li><a href=" + url + ">" + 
-                 title + "</a> </li>";
+                 title + "</a> [ " +
+                 score + 
+                 " ] </li>";
     });
     links += "</ul>"
 

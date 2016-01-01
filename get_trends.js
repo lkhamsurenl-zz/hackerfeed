@@ -33,7 +33,7 @@ function parseDescriptions(title, jsonObj, limit) {
     	}
     	links += "<li><a href=" + url + ">" + 
     			 description + "</a>"  + 
-    			 " [" + language + "] </li>";
+    			 " [ " + language + " ] </li>";
     });
     links += "</ul>";
 	// Display in the trends paragraph in popup.html page.
