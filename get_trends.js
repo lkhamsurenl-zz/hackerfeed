@@ -37,7 +37,7 @@ function parseDescriptions(title, jsonObj, limit) {
     });
     links += "</ul>";
 	// Display in the trends paragraph in popup.html page.
-	document.getElementById("trends").innerHTML += links;
+	document.getElementById("git_trends").innerHTML += links;
 }
 
 // function to make API call to url and display top limit results.

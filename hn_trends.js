@@ -1,6 +1,6 @@
 // Given items, display items in popup.html.
 function render(items) {
-    var links = "<center><h3>HN</h3></center>";
+    var links = "<center><h3 id='hn_header'>Hacker News</h3></center>";
     links += "<ul>"
     jQuery.each(items, function(i, item) {
         console.log(item);
@@ -17,7 +17,7 @@ function render(items) {
     });
     links += "</ul>"
 
-    document.getElementById("trends").innerHTML += links;
+    document.getElementById("hn_trends").innerHTML += links;
 }
 
 // get story for an individual item based on the id, then callback.
