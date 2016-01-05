@@ -9,6 +9,8 @@ subreddits by adding them in options page.
 
 ![Screenshot 1][screenshot1]
 ![Screenshot 2][screenshot2]
+
+To add personalized repos:
 ![Options page][options]
 
 [screenshot1]: assets/hackerfeed_screenshot1.png
