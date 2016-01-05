@@ -1,7 +1,8 @@
 <html>
   <head>
-    <script src="get_trends.js"></script>
-    <script src="hn_trends.js"></script>
+    <script src="scripts/git_trends.js"></script>
+    <script src="scripts/hn_trends.js"></script>
+    <script src="scripts/reddit_trends.js"></script>
     <script src="popup.js"></script>
     <script src="jquery/jquery-latest.min.js"></script>
     <style>
@@ -14,6 +15,12 @@
             }
             #hn_header {
                 background-color: #ff6600;
+            }
+            #git_header {
+                background-color: #f5f5f5;
+            }
+            #reddit_header {
+                background-color: #cce4fc;
             }
             #hn_trends {
                 background-color: #f6f6ef;
@@ -39,8 +46,11 @@
     </style>
   </head>
   <body>
-    <center><img src="assets/github.png" height="32" width="32"></center>
+    <!--Displays the flame and news feed 
+    <center><h2><img src="assets/flame.png" height="32" width="32"> News Feed</h2></center>
+    -->
     <p id="git_trends"></p>
     <p id="hn_trends"></p>
+    <p id="reddit_trends"></p>
   </body>
 </html>

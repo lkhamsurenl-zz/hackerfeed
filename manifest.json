@@ -18,6 +18,7 @@
   "permissions": [
     "identity",
     "https://github.com/",
-    "https://hacker-news.firebaseio.com/"
+    "https://hacker-news.firebaseio.com/",
+    "http://www.reddit.com/"
   ]
 }

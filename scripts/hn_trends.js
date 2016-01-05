@@ -3,7 +3,6 @@ function render(items) {
     var links = "<center><h3 id='hn_header'>Hacker News</h3></center>";
     links += "<ul>"
     jQuery.each(items, function(i, item) {
-        console.log(item);
         // Resolve undefined url by displaying the story in ycombinator website.
         url = item["url"] == "" || typeof item["url"] === "undefined" ? 
             ("https://news.ycombinator.com/item?id=" + item["id"]) :

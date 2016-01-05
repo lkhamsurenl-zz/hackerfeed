@@ -21,7 +21,11 @@ function subtractedDaysFromCurrent(num_days) {
 function parseDescriptions(title, jsonObj, limit) {
 	// Get description and html_url for each entry.
 	// TODO(lkhamsurenl): Show only English repositories.
-	var links = "<center><h3>" + title + "</h3></center>";
+	var links = "<center><h3 id='git_header'>" + 
+        "<img src='assets/github.png' height='16' width='16'>" + 
+        "&nbsp" + 
+        title + 
+        "</h3></center>";
     links += "<ul>";
     jQuery.each(jsonObj.items.slice(0, limit), function(i, item) {
     	url = item["html_url"];
