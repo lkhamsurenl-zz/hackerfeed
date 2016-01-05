@@ -1,6 +1,6 @@
 {
-  "name": "GitTrending",
-  "version": "0.1",
+  "name": "HackerFeed",
+  "version": "0.2",
   "manifest_version": 2,
   "icons": {
     "256": "icon_256.png",
@@ -12,7 +12,7 @@
   "browser_action": {
     "default_icon": "assets/flame.png",
     "default_popup": "popup.html",
-    "default_title": "Top GitHub repositories created recently"
+    "default_title": "HackerFeed recent top feeds"
   },
 
   "permissions": [

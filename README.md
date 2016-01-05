@@ -1,6 +1,9 @@
-# GitTrending
-Chrome extension to show weekly popular Github repositories
+# HackerFeed
+Chrome extension to show recently popular feeds on:
+* GitHub
+* Hacker News
+* Reddit
 
 ![alt text][screenshot]
 
-[screenshot]: assets/git_trending.png
+[screenshot]: assets/hackerfeed_screenshot.png
