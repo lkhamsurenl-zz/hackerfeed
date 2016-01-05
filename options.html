@@ -4,44 +4,65 @@
   <title>Add Options</title>
   <style>
     body: { padding: 10px; }
-    table {
-    border-collapse: collapse;
-    width: 100%;
+    .input_fields {width:70%}​
+    #input_table {width:100%;}
+    .tables {
+      border-collapse: collapse;
+      width: 100%;
     }
-    th, td {
-        text-align: left;
-        padding: 8px;
+    .tables th, td {
+      text-align: left;
+      padding: 2px;
     }
-
-    tr:nth-child(even){background-color: #f2f2f2}
-
-    th {
-        background-color: #4CAF50;
-        color: white;
+    .tables tr:nth-child(even){background-color: #f2f2f2}
+    .tables th {
+      background-color: #4CAF50;
+      color: white;
     }
   </style>
-  <script src="jquery/jquery-latest.min.js"></script>
 </head>
 
 <body>
   <div>
+    <br/> 
     <div>
-      <input type="text" id="subreddit">
-      <input id="add_subreddit" type="button" value="Add subreddit">
-    </div>
-    <br/>
-    <div>
-      <table id="subreddit_table"> 
+      <table id="input_table"> 
         <tr>
-          <th>Subreddit</th>
-          <th>Remove</th>
+          <td>
+            <input type="text" id="subreddit" class="input_fields" placeholder="Enter Subreddit">
+            <input id="add_subreddit" class="add_buttons" type="button" value="Add">
+          </td>
+          <td>
+            <input type="text" id="git" class="input_fields" placeholder="Enter Git">
+            <input id="add_git" class="add_buttons" type="button" value="Add">
+          </td>
+        </tr>
+        <tr> 
+          <td valign="top">
+            <!-- List of subreddits user want to see -->
+            <table id="subreddit_table" class="tables"> 
+              <tr>
+                <th>Subreddit</th>
+                <th>Remove</th>
+              </tr>
+            </table>
+          </td>
+          <td valign="top">
+            <!-- List of git trends user want to see -->
+            <table id="git_table" class="tables"> 
+              <tr>
+                <th>Git</th>
+                <th>Remove</th>
+              </tr>
+            </table>
+          </td>
         </tr>
       </table>
     </div>
   </div>
-
+  <br/><br/>
   <div id="status"></div>
-  <button id="save">Save</button>
+  <center><button id="save">Save</button></center>
 
   <script src="options.js"></script>
 </body>

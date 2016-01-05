@@ -40,6 +40,17 @@ function callAPI(subreddit, limit) {
     xmlhttp.send();
 }
 
-// Popular 15 stories.
-callAPI("cscareerquestions", 15);
-callAPI("machinelearning", 15);
+// Get list of subreddits to load from storage.
+function read_options() {
+  // Use default value subreddits: "".
+  chrome.storage.sync.get({
+    subreddit: "",
+    }, function(items) {
+        var subreddits = items.subreddit.split(",");
+        for (i = 0; i < subreddits.length; i++) {
+            callAPI(subreddits[i], 15);
+        }
+  });
+}
+
+read_options()

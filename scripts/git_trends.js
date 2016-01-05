@@ -78,8 +78,20 @@ function getTrendingByKeywords(keyword, days, limit) {
     makeAPIcall(title, url, limit);
 }
 
+// Get list of subreddits to load from storage.
+function read_options() {
+  // Use default value subreddits: "".
+  chrome.storage.sync.get({
+    git: "",
+    }, function(items) {
+        var gits = items.git.split(",");
+        for (i = 0; i < gits.length; i++) {
+            // Popular repos created within last month.
+            getTrendingByKeywords(gits[i], 30, 15);
+        }
+  });
+}
+
 // Popular repos created within last 7 days.
 getTrendingByKeywords("", 7, 15)
-
-// Popular ML repos created within last month.
-getTrendingByKeywords("Machine Learning", 30, 15);
+read_options()

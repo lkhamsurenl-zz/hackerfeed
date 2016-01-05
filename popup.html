@@ -43,14 +43,27 @@
             li {
                 margin: 5px 0;
             }
+            #add_button {
+                float:right;
+                margin: 5px 5px;
+            }
     </style>
   </head>
   <body>
-    <!--Displays the flame and news feed 
-    <center><h2><img src="assets/flame.png" height="32" width="32"> News Feed</h2></center>
-    -->
+    <!--Displays the flame and news feed -->
+    <h2>
+        <div class="header clearfix">
+            <img src="assets/flame.png" height="24" width="24"> 
+            HackerFeed
+            <button id="add_button">
+                <img src="assets/add.png" height="16", width="16"/>
+            </button>
+        </div>
+    </h2>
+    
     <p id="reddit_trends"></p>
     <p id="git_trends"></p>
     <p id="hn_trends"></p>
   </body>
+  <script src="scripts/add_button_script.js"></script>
 </html>
