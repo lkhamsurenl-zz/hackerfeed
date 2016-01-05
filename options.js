@@ -107,12 +107,16 @@ function restore_options() {
   });
 }
 
+// button listener to add new entry to corresponding table.
 function addButtonListener(option) {
-  var add_button = document.getElementById("add_" + option);
+  var button_id = "add_" + option;
+  var add_button = document.getElementById(button_id);
   add_button.addEventListener('click', save_options, false);
   add_button.optionParam = option;
 }
 
+// Restore options when document is loaded.
 document.addEventListener('DOMContentLoaded', restore_options);
+// Add button listeners for both subreddit and git.
 addButtonListener("subreddit");
 addButtonListener("git");
