@@ -1,29 +1,24 @@
-function get_values_from_table(table_name) {
-  var table = document.getElementById(table_name);
-  var values = [];
-  // First row of the table is header.
-  for (i = 1; i < table.rows.length; i++) {
-    value = table.rows[i].cells[0].innerHTML;
-    // Add only non empty values.
-    if (value != "") {
-      values.push(value);
-    }
+/******************************************************************************
+                          WRITING TO STORAGE
+******************************************************************************/
+// Create mapping based on table_name and value.
+function map_options(table_name, values) {
+  var mapping = {};
+  switch (table_name) {
+    case "subreddit_table":
+      mapping = {subreddit: values};
+      break;
+    case "git_table":
+      mapping = {git: values};
+      break;
   }
-  return values;
-}
-
-function get_values_from_tables() {
-  subreddits = get_values_from_table("subreddit_table");
-  gits = get_values_from_table("git_table");
-  return [subreddits, gits];
+  return mapping;
 }
 
 // Update store with subreddit and git values.
-function update_options(subs, gits) {
-  chrome.storage.sync.set({
-    subreddit: subs,
-    git: gits,
-    }, function() {
+function update_options(table_name, values) {
+  var mapping = map_options(table_name, values);
+  chrome.storage.sync.set(mapping, function() {
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
     status.textContent = 'Options saved.';
@@ -34,24 +29,28 @@ function update_options(subs, gits) {
 }
 
 // Reflect table change in storage.
-function update_storage_from_tables() {
-  // Get all subreddits and set the new value.
-  var table_values = get_values_from_tables();
-  var subreddits = table_values[0].join();
-  var gits = table_values[1].join();
-  update_options(subreddits, gits);
+function update_storage_from_table(table_name) {
+  var table_values = get_values_from_table(table_name);
+  update_options(table_name, table_values);
 }
 
-function add_button_listeners(table_name) {
+/******************************************************************************
+                              CHANGE TABLE
+******************************************************************************/
+
+// Given a table name, get all the values in the table.
+function get_values_from_table(table_name) {
   var table = document.getElementById(table_name);
-  var buttons = document.getElementsByClassName(table_name + "_remove_buttons");
-  for (i = 0; i < buttons.length; i++) {
-    buttons[i].addEventListener("click", function(){
-      // Remove row from the table.
-      table.deleteRow(this.id);
-      update_storage_from_tables();
-    });
+  var values = [];
+  // First row of the table is header, so skip.
+  for (i = 1; i < table.rows.length; i++) {
+    value = table.rows[i].cells[0].innerHTML;
+    // Add only non empty values.
+    if (value != "") {
+      values.push(value);
+    }
   }
+  return values.join();
 }
 
 // Populate row with item and removal button.
@@ -80,6 +79,10 @@ function populate_table(table_name, items) {
   add_button_listeners(table_name);
 }
 
+/******************************************************************************
+                      SYNCRONIZE TABLES AND STORAGE
+******************************************************************************/
+
 // Saves options to chrome.storage.sync.
 // Assume option: git or subreddit.
 function save_options(e) {
@@ -91,7 +94,7 @@ function save_options(e) {
   var new_row = table.insertRow(-1);
   populate_row(table_name, new_row, new_value, table.rows.length - 1);
   // Reflect the table change on storage.
-  update_storage_from_tables();
+  update_storage_from_table(table_name);
 }
 
 // Restores select box and checkbox state using the preferences
@@ -105,6 +108,22 @@ function restore_options() {
     populate_table("subreddit_table", items.subreddit.split(","));
     populate_table("git_table", items.git.split(","));
   });
+}
+
+/******************************************************************************
+                              ADD LISTENERS
+******************************************************************************/
+
+function add_button_listeners(table_name) {
+  var table = document.getElementById(table_name);
+  var buttons = document.getElementsByClassName(table_name + "_remove_buttons");
+  for (i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener("click", function(){
+      // Remove row from the table.
+      table.deleteRow(this.id);
+      update_storage_from_table(table_name);
+    });
+  }
 }
 
 // button listener to add new entry to corresponding table.
