@@ -15,7 +15,13 @@
     "default_title": "HackerFeed recent top feeds"
   },
 
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+  },
+
   "permissions": [
+    "storage",
     "identity",
     "https://github.com/",
     "https://hacker-news.firebaseio.com/",
