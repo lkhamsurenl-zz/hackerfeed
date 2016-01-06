@@ -58,9 +58,11 @@ function populate_row(table_name, row, item, index) {
   // Insert the item in first cell.
   row.insertCell(0).innerHTML = item;
   // Insert removal button on second cell.
-  button_class = table_name + "_remove_buttons";
-  row.insertCell(1).innerHTML = "<button id='" + index + 
-    "'class='" + button_class + "'>X</button>";
+  button_id = table_name + "," + index;
+  row.insertCell(1).innerHTML = "<button id='" + button_id + 
+    "'>X</button>";
+  // Add button listener when clicked.
+  add_button_listener(button_id);
 }
 
 // Populate the options table with items.
@@ -75,8 +77,6 @@ function populate_table(table_name, items) {
       table_length++
     }
   }
-  // Add Button Listeners once it's been populated.
-  add_button_listeners(table_name);
 }
 
 /******************************************************************************
@@ -117,16 +117,23 @@ function restore_options() {
                               ADD LISTENERS
 ******************************************************************************/
 
-function add_button_listeners(table_name) {
+// Add listener to a given button, when clicked.
+function add_button_listener(button_id) {
+  // button_id has format: "table_name,index"
+  var ids = button_id.split(",");
+  var table_name = ids[0];
+  var index = ids[1];
+
+  // Get table and button.
   var table = document.getElementById(table_name);
-  var buttons = document.getElementsByClassName(table_name + "_remove_buttons");
-  for (i = 0; i < buttons.length; i++) {
-    buttons[i].addEventListener("click", function(){
-      // Remove row from the table.
-      table.deleteRow(this.id);
-      update_storage_from_table(table_name);
-    });
-  }
+  var button = document.getElementById(button_id);
+
+  button.addEventListener("click", function(){
+    // Remove row from the table.
+    table.deleteRow(index);
+    // Updade storage based on the table.
+    update_storage_from_table(table_name);
+  });
 }
 
 // button listener to add new entry to corresponding table.
