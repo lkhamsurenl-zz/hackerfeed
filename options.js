@@ -90,11 +90,14 @@ function save_options(e) {
   table_name = option + "_table";
   var table = document.getElementById(table_name);
   // Get new value and insert to the table.
-  var new_value = document.getElementById(option).value;
+  var input_field = document.getElementById(option);
+  var new_value = input_field.value;
   var new_row = table.insertRow(-1);
   populate_row(table_name, new_row, new_value, table.rows.length - 1);
   // Reflect the table change on storage.
   update_storage_from_table(table_name);
+  // Update input_field value to "".
+  input_field.value = "";
 }
 
 // Restores select box and checkbox state using the preferences
