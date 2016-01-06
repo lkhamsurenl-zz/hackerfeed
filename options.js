@@ -31,7 +31,7 @@ function update_options(table_name, values) {
 // Reflect table change in storage.
 function update_storage_from_table(table_name) {
   var table_values = get_values_from_table(table_name);
-  update_options(table_name, table_values);
+  update_options(table_name, table_values.join());
 }
 
 /******************************************************************************
@@ -40,8 +40,11 @@ function update_storage_from_table(table_name) {
 
 // Given a table name, get all the values in the table.
 function get_values_from_table(table_name) {
-  var table = document.getElementById(table_name);
-  var values = [];
+  // values: All the values in table.
+  var table, values;
+  
+  table = document.getElementById(table_name);
+  values = [];
   // First row of the table is header, so skip.
   for (i = 1; i < table.rows.length; i++) {
     value = table.rows[i].cells[0].innerHTML;
@@ -50,7 +53,7 @@ function get_values_from_table(table_name) {
       values.push(value);
     }
   }
-  return values.join();
+  return values;
 }
 
 // Populate row with item and removal button.
@@ -59,16 +62,17 @@ function populate_row(table_name, row, item, index) {
   row.insertCell(0).innerHTML = item;
   // Insert removal button on second cell.
   button_id = table_name + "," + index;
-  row.insertCell(1).innerHTML = "<button id='" + button_id + 
-    "'>X</button>";
+  row.insertCell(1).innerHTML = "<button id='" + button_id + "'>X</button>";
   // Add button listener when clicked.
   add_button_listener(button_id);
 }
 
 // Populate the options table with items.
 function populate_table(table_name, items) {
-  var table = document.getElementById(table_name);
-  var table_length = table.rows.length;
+  var table, table_length;
+
+  table = document.getElementById(table_name);
+  table_length = table.rows.length;
   for (i = 0; i < items.length; i++) {
     // Add item only if it's non empty.
     if (items[i] != "") {
@@ -84,24 +88,33 @@ function populate_table(table_name, items) {
 ******************************************************************************/
 
 // Saves options to chrome.storage.sync.
-// Assume option: git or subreddit.
 function save_options(e) {
+  // input_field: input field for corresponding table.
+  // new_value: new value entered in input_field
+  var table, input_field, new_value;
+
+  // Assume option: git or subreddit.
   option = e.target.optionParam;
   table_name = option + "_table";
-  var table = document.getElementById(table_name);
-  // Get new value and insert to the table.
-  var input_field = document.getElementById(option);
-  var new_value = input_field.value;
-  var new_row = table.insertRow(-1);
-  populate_row(table_name, new_row, new_value, table.rows.length - 1);
-  // Reflect the table change on storage.
-  update_storage_from_table(table_name);
+  table = document.getElementById(table_name);
+
+  input_field = document.getElementById(option);
+  new_value = input_field.value;
+
+  // if the value does not already exist, add to the table.
+  if (get_values_from_table(table_name).indexOf(new_value) < 0) {
+    var new_row = table.insertRow(-1);
+    populate_row(table_name, new_row, new_value, table.rows.length - 1);
+    // Reflect the table change on storage.
+    update_storage_from_table(table_name);
+  }
+
   // Update input_field value to "".
   input_field.value = "";
 }
 
-// Restores select box and checkbox state using the preferences
-// stored in chrome.storage.
+// Restores select box and checkbox state using the preferences stored in
+// chrome.storage.
 function restore_options() {
   // Use default value subreddits: "".
   chrome.storage.sync.get({
@@ -119,14 +132,20 @@ function restore_options() {
 
 // Add listener to a given button, when clicked.
 function add_button_listener(button_id) {
+  // ids: [table_name, index]
+  // table_name: table name, in which button is located.
+  // table: corresponding table.
+  // index: row's index in table.
+  var ids, table_name, table, index, button;
+
   // button_id has format: "table_name,index"
-  var ids = button_id.split(",");
-  var table_name = ids[0];
-  var index = ids[1];
+  ids = button_id.split(",");
+  table_name = ids[0];
+  index = ids[1];
 
   // Get table and button.
-  var table = document.getElementById(table_name);
-  var button = document.getElementById(button_id);
+  table = document.getElementById(table_name);
+  button = document.getElementById(button_id);
 
   button.addEventListener("click", function(){
     // Remove row from the table.
@@ -136,12 +155,15 @@ function add_button_listener(button_id) {
   });
 }
 
-// button listener to add new entry to corresponding table.
+// Button listener to add new entry to corresponding table.
 function addButtonListener(option) {
-  var button_id = "add_" + option;
-  var add_button = document.getElementById(button_id);
-  add_button.addEventListener('click', save_options, false);
-  add_button.optionParam = option;
+  var button_id, button;
+
+  button_id = "add_" + option;
+  // Add event listener for the button.
+  button = document.getElementById(button_id);
+  button.addEventListener('click', save_options, false);
+  button.optionParam = option;
 }
 
 // Restore options when document is loaded.
