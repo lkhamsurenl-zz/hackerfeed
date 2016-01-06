@@ -50,7 +50,7 @@ function get_values_from_table(table_name) {
     value = table.rows[i].cells[0].innerHTML;
     // Add only non empty values.
     if (value != "") {
-      values.push(value);
+      values[values.length] = value;
     }
   }
   return values;

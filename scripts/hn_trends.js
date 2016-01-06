@@ -40,8 +40,8 @@ function topStories(items) {
     var stories = [];
     for (i = 0; i < items.length; i++) {
         getStory(items[i], function(obj){
-            // given a obj, it pushes it inot the value before rendering.
-            stories.push(obj);
+            // given a obj, it pushes it into the value before rendering.
+            stories[stories.length] = obj;
             if (stories.length == items.length) {
                 render(stories);
             } 
