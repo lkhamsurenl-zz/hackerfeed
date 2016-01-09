@@ -18,9 +18,8 @@ function subtractedDaysFromCurrent(num_days) {
 	return start_date;
 }
 
-// Given a Json Object with top limit trends, parse and render in popup.html
-// page.
-function parseDescriptions(title, jsonObj, limit) {
+// Given top items with trends, parse and render in popup.html page.
+function parseDescriptions(title, items) {
 	// Get description and html_url for each entry.
 	var links = "<center><h3 id='git_header'>" + 
         "<img src='assets/github.png' height='16' width='16'>" + 
@@ -28,14 +27,12 @@ function parseDescriptions(title, jsonObj, limit) {
         title + 
         "</h3></center>";
     links += "<ul>";
-    jQuery.each(jsonObj.items.slice(0, limit), function(i, item) {
+    jQuery.each(items, function(i, item) {
     	url = item["html_url"];
-    	description = item["description"];
+    	description = item["description"] != "" ? 
+            item["description"] :
+            item["name"];
     	language = item["language"];
-    	// If no description is given, show the name.
-    	if (description == "") {
-    		description = item["name"];
-    	}
     	links += "<li><a href=" + url + ">" + 
     			 description + "</a>"  + 
     			 " [ " + language + " ] </li>";
@@ -45,13 +42,36 @@ function parseDescriptions(title, jsonObj, limit) {
 	document.getElementById("git_trends").innerHTML += links;
 }
 
+// Filter bad items satisfying:
+// 1. item has neither description nor name.
+// 2. item should contain 70% English characters and numbers (Otherwise
+//    non-readable).
+function filterItems(items, limit) {
+    var topItems = [];
+    var english = /[A-Za-z0-9]/g;
+    for (i = 0; i < items.length; i++) {
+        var description = items[i]["description"] != "" ?
+            items[i]["description"] :
+            items[i]["name"];
+        if (description == "") continue;
+        if (description.replace(english, '').length > 0.3 * description.length)
+            continue;
+
+        topItems[topItems.length] = items[i];
+        if (topItems.length == limit) break;
+    }
+    return topItems;
+}
+
 // function to make API call to url and display top limit results.
 function makeAPIcall(title, url, limit) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         // if the request succeed, display the top requests.
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            parseDescriptions(title, JSON.parse(xmlhttp.responseText), limit);
+            var topItems = filterItems(JSON.parse(xmlhttp.responseText).items,
+                limit);
+            parseDescriptions(title, topItems);
         }
     };
 
