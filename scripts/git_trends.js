@@ -29,13 +29,16 @@ function parseDescriptions(title, items) {
     links += "<ul>";
     jQuery.each(items, function(i, item) {
     	url = item["html_url"];
+        // Get name if the repo has no description.
     	description = item["description"] != "" ? 
             item["description"] :
             item["name"];
-    	language = item["language"];
+        // Display no language if no language detected for the repo.
+    	language = item["language"] ? " [ " + item["language"] + " ] " : "";
+        // Construct a link with description.
     	links += "<li><a href=" + url + ">" + 
     			 description + "</a>"  + 
-    			 " [ " + language + " ] </li>";
+    			 language + "</li>";
     });
     links += "</ul>";
 	// Display in the trends paragraph in popup.html page.
