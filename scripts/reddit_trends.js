@@ -10,7 +10,7 @@ function renderReddit(subreddit, items) {
         // Resolve undefined url by displaying the story in ycombinator website.
         url = item["data"]["url"];
         title = item["data"]["title"];
-        score = item["data"]["score"]
+        score = item["data"]["score"];
         links += "<li><a href=" + url + ">" + 
                  title + "</a> [ " +
                  score + 
@@ -21,6 +21,19 @@ function renderReddit(subreddit, items) {
     document.getElementById("reddit_trends").innerHTML += links;
 }
 
+// Return first limit items that are above minScore threshold. 
+function filterTopItems(items, limit, minScore) {
+    var topItems = [];
+    for (i = 0; i < items.length; i++) {
+        if (items[i]["data"]["score"] >= minScore) {
+            topItems[topItems.length] = items[i];
+        }
+        // Done collecting limit number of items.
+        if (topItems.length == limit) break;
+    }
+    return topItems;
+}
+
 // function to make API call to url and display top limit results.
 function callAPI(subreddit, limit) {
     var xmlhttp = new XMLHttpRequest();
@@ -28,9 +41,12 @@ function callAPI(subreddit, limit) {
     xmlhttp.onreadystatechange = function() {
         // if the request succeed, display the top requests.
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            // Filter out items score less than 3.
+            topItems = filterTopItems(
+                JSON.parse(xmlhttp.responseText)["data"]["children"], 
+                limit, 3);
             // Display in the trends paragraph in popup.html page.
-            renderReddit(subreddit, 
-                JSON.parse(xmlhttp.responseText)["data"]["children"].slice(0, limit));
+            renderReddit(subreddit, topItems);
         }
     };
     
