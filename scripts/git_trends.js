@@ -1,7 +1,9 @@
 // Format given date to YYYY-MM-DD.
 function shortFormatDate(date) {
-	day = ('0' + date.getDate()).slice(-2); // Put leading 0 if necessary.
-	month = ('0' + (date.getMonth() + 1)).slice(-2); // Month is 0 based.
+    // Put leading 0 if necessary on month and days.
+	day = ('0' + date.getDate()).slice(-2);
+    // Month is 0 based. Jan - 0, Dec - 11.
+	month = ('0' + (date.getMonth() + 1)).slice(-2);
 	year = date.getFullYear();
 
 	return year + "-" + month + "-" + day;
@@ -20,7 +22,6 @@ function subtractedDaysFromCurrent(num_days) {
 // page.
 function parseDescriptions(title, jsonObj, limit) {
 	// Get description and html_url for each entry.
-	// TODO(lkhamsurenl): Show only English repositories.
 	var links = "<center><h3 id='git_header'>" + 
         "<img src='assets/github.png' height='16' width='16'>" + 
         "&nbsp" + 
@@ -46,9 +47,7 @@ function parseDescriptions(title, jsonObj, limit) {
 
 // function to make API call to url and display top limit results.
 function makeAPIcall(title, url, limit) {
-    // TODO(lkhamsurenl): Cache results for one day, load when it's too old.
     var xmlhttp = new XMLHttpRequest();
-
     xmlhttp.onreadystatechange = function() {
         // if the request succeed, display the top requests.
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
