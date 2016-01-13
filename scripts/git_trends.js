@@ -56,7 +56,7 @@ function filterItems(items, limit) {
         var description = items[i]["description"] != "" ?
             items[i]["description"] :
             items[i]["name"];
-        if (description == "") continue;
+        if (description == null || description == "") continue;
         if (description.replace(english, '').length > 0.3 * description.length)
             continue;
 
