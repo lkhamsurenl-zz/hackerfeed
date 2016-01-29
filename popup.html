@@ -1,10 +1,11 @@
 <html>
   <head>
+    <script src="jquery/jquery-latest.min.js"></script>
     <script src="scripts/git_trends.js"></script>
     <script src="scripts/hn_trends.js"></script>
     <script src="scripts/reddit_trends.js"></script>
+    <script src="scripts/arxiv_trends.js"></script>
     <script src="popup.js"></script>
-    <script src="jquery/jquery-latest.min.js"></script>
     <style>
             html, body {
                 width: 600;
@@ -12,6 +13,10 @@
                 margin: 0;
                 padding: 0;
                 background-color: white;
+            }
+            #arxiv_header{
+                color: #fff;
+                background-color: #b31b1b;
             }
             #hn_header {
                 background-color: #ff6600;
@@ -61,6 +66,7 @@
         </div>
     </h2>
     
+    <p id="arxiv_trends"></p>
     <p id="reddit_trends"></p>
     <p id="git_trends"></p>
     <p id="hn_trends"></p>

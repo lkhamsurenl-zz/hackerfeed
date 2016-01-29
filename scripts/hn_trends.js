@@ -1,5 +1,5 @@
 // Given items, display items in popup.html.
-function render(items) {
+function renderHN(items) {
     var links = "<center><h3 id='hn_header'>Hacker News</h3></center>";
     links += "<ul>"
     jQuery.each(items, function(i, item) {
@@ -43,7 +43,7 @@ function topStories(items) {
             // given a obj, it pushes it into the value before rendering.
             stories[stories.length] = obj;
             if (stories.length == items.length) {
-                render(stories);
+                renderHN(stories);
             } 
         });
     }
