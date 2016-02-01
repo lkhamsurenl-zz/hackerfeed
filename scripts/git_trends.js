@@ -101,7 +101,7 @@ function getTrendingByKeywords(keyword, days, limit) {
 }
 
 // Get list of subreddits to load from storage.
-function read_options() {
+function loadOptions() {
   // Use default value subreddits: "".
   chrome.storage.sync.get({
     git: "",
@@ -116,4 +116,4 @@ function read_options() {
 
 // Popular repos created within last 7 days.
 getTrendingByKeywords("", 7, 15)
-read_options()
+loadOptions()

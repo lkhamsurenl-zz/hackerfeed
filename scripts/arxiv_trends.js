@@ -1,6 +1,7 @@
 // Given items, display items in popup.html.
-function renderArxiv(items) {
-    var links = "<center><h3 id='arxiv_header'>arXiv</h3></center>";
+function renderArxiv(keyword, items) {
+    var links = "<center><h3 id='arxiv_header'>arXiv - " + keyword +  
+        "</h3></center>";
     links += "<ul>"
     jQuery.each(items, function(i, item) {
         url = item["url"];
@@ -29,16 +30,35 @@ function generateItems(data) {
     return items;
 }
 
-// Most recent 15 papers.
-$.ajax({
-    url: "http://export.arxiv.org/api/query?search_query=cat:cs.DS"+
-    	"&sortBy=lastUpdatedDate&sortOrder=descending&start=0&max_results=15",
-    type: "GET",
-    dataType: "html",
-    	success: function(data) {
-    	// Generate items for easy rendering.
-    	items = generateItems(data);
+function getArxivComponentByKeyword(keyword, limit) {
+    // Most recent limit papers.
+    $.ajax({
+        url: "http://export.arxiv.org/api/query?search_query=cat:" + keyword + 
+            "&sortBy=lastUpdatedDate&sortOrder=descending&start=0&max_results="+ 
+            limit,
+        type: "GET",
+        dataType: "html",
+            success: function(data) {
+            // Generate items for easy rendering.
+            items = generateItems(data);
 
-		renderArxiv(items);
-    }
-});
+            renderArxiv(keyword, items);
+        }
+    });
+}
+
+
+// Get list of arxiv componenets to load from storage.
+function loadArxivOptions() {
+  // Use default value subreddits: "".
+  chrome.storage.sync.get({
+    arxiv: "",
+    }, function(items) {
+        var arxivComponents = items.arxiv.split(",");
+        for (i = 0; i < arxivComponents.length; i++) {
+            getArxivComponentByKeyword(arxivComponents[i], 15);
+        }
+  });
+}
+
+loadArxivOptions();

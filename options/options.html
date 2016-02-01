@@ -4,15 +4,19 @@
   <title>Add Options</title>
   <style>
     body: { padding: 10px; }
-    .input_fields {width:70%}​
-    #input_table {width:100%;}
+    .input_fields {width:80%}​
+    #input_table {
+      width:100%;
+    }
     .tables {
-      border-collapse: collapse;
-      width: 100%;
+      table-layout: fixed;
+      width: 80%;
     }
     .tables th, td {
+      border: 1px solid black;
       text-align: left;
       padding: 2px;
+      overflow: hidden;
     }
     .tables tr:nth-child(even){background-color: #f2f2f2}
     .tables th {
@@ -28,34 +32,43 @@
     <div>
       <table id="input_table"> 
         <tr>
-          <td>
             <input type="text" id="subreddit" class="input_fields" placeholder="Enter Subreddit">
             <input id="add_subreddit" class="add_buttons" type="button" value="Add">
-          </td>
-          <td>
-            <input type="text" id="git" class="input_fields" placeholder="Enter Git">
-            <input id="add_git" class="add_buttons" type="button" value="Add">
-          </td>
-        </tr>
-        <tr> 
-          <td valign="top">
             <!-- List of subreddits user want to see -->
             <table id="subreddit_table" class="tables"> 
+              <col width="43px">
+              <col width="10px">
               <tr>
                 <th>Subreddit</th>
                 <th>Remove</th>
               </tr>
             </table>
-          </td>
-          <td valign="top">
+        </tr>
+        <tr> 
+            <input type="text" id="git" class="input_fields" placeholder="Enter Git">
+            <input id="add_git" class="add_buttons" type="button" value="Add">
             <!-- List of git trends user want to see -->
             <table id="git_table" class="tables"> 
+              <col width="43px">
+              <col width="10px">
               <tr>
                 <th>Git</th>
                 <th>Remove</th>
               </tr>
             </table>
-          </td>
+        <tr/>
+        <tr>
+            <input type="text" id="arxiv" class="input_fields" placeholder="Enter arXiv">
+            <input id="add_arxiv" class="add_buttons" type="button" value="Add">
+            <!-- List of arXiv trends user want to see -->
+            <table id="arxiv_table" class="tables"> 
+              <col width="43px">
+              <col width="10px">
+              <tr>
+                <th>arXiv</th>
+                <th>Remove</th>
+              </tr>
+            </table>
         </tr>
       </table>
     </div>

@@ -66,9 +66,13 @@
         </div>
     </h2>
     
-    <p id="arxiv_trends"></p>
+    <!-- Optimal ordering could result in nice rendering experience, depending
+    on the delay of render for each trend. Currently, hn loads slowest since
+    all stories need separate API call to get links.
+    -->
     <p id="reddit_trends"></p>
     <p id="git_trends"></p>
+    <p id="arxiv_trends"></p>
     <p id="hn_trends"></p>
   </body>
   <script src="options/add_button_script.js"></script>

@@ -11,11 +11,14 @@ function map_options(table_name, values) {
     case "git_table":
       mapping = {git: values};
       break;
+    case "arxiv_table":
+      mapping = {arxiv: values};
+      break;
   }
   return mapping;
 }
 
-// Update store with subreddit and git values.
+// Update store with table values.
 function update_options(table_name, values) {
   var mapping = map_options(table_name, values);
   chrome.storage.sync.set(mapping, function() {
@@ -120,9 +123,11 @@ function restore_options() {
   chrome.storage.sync.get({
     subreddit: "",
     git: "",
+    arxiv: "",
   }, function(items) {
     populate_table("subreddit_table", items.subreddit.split(","));
     populate_table("git_table", items.git.split(","));
+    populate_table("arxiv_table", items.arxiv.split(","))
   });
 }
 
@@ -171,3 +176,4 @@ document.addEventListener('DOMContentLoaded', restore_options);
 // Add button listeners for both subreddit and git.
 addButtonListener("subreddit");
 addButtonListener("git");
+addButtonListener("arxiv");
