@@ -19,7 +19,7 @@ function subtractedDaysFromCurrent(num_days) {
 }
 
 // Given top items with trends, parse and render in popup.html page.
-function parseDescriptions(title, items) {
+function parseDescriptionsGit(title, items) {
 	// Get description and html_url for each entry.
 	var links = "<center><h3 id='git_header'>" + 
         "<img src='assets/github.png' height='16' width='16'>" + 
@@ -49,7 +49,7 @@ function parseDescriptions(title, items) {
 // 1. item has neither description nor name.
 // 2. item should contain 70% English characters and numbers (Otherwise
 //    non-readable).
-function filterItems(items, limit) {
+function filterItems(items, numEntries) {
     var topItems = [];
     var english = /[A-Za-z0-9]/g;
     for (i = 0; i < items.length; i++) {
@@ -61,20 +61,20 @@ function filterItems(items, limit) {
             continue;
 
         topItems[topItems.length] = items[i];
-        if (topItems.length == limit) break;
+        if (topItems.length == numEntries) break;
     }
     return topItems;
 }
 
-// function to make API call to url and display top limit results.
-function makeAPIcall(title, url, limit) {
+// function to make API call to url and display top numEntries results.
+function makeAPIcallGit(title, url, numEntries) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         // if the request succeed, display the top requests.
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var topItems = filterItems(JSON.parse(xmlhttp.responseText).items,
-                limit);
-            parseDescriptions(title, topItems);
+                numEntries);
+            parseDescriptionsGit(title, topItems);
         }
     };
 
@@ -83,10 +83,10 @@ function makeAPIcall(title, url, limit) {
     xmlhttp.send();
 }
 
-// Get Popular repos created within days with keyword, display only top limit
+// Get Popular repos created within days with keyword, display only top numEntries
 // results.
 // "" keyword is a default value.
-function getTrendingByKeywords(keyword, days, limit) {
+function getTrendingByKeywordsGit(keyword, days, numEntries) {
     
     var short_date = shortFormatDate(subtractedDaysFromCurrent(days));
 
@@ -97,23 +97,23 @@ function getTrendingByKeywords(keyword, days, limit) {
         "&sort=stars&order=desc";
 
     var title = (keyword == "" ? "Recent top repositories" : keyword + " ");
-    makeAPIcall(title, url, limit);
+    makeAPIcallGit(title, url, numEntries);
 }
 
 // Get list of subreddits to load from storage.
-function loadOptions() {
+function loadOptionsGit(numEntries) {
   // Use default value subreddits: "".
   chrome.storage.sync.get({
     git: "",
     }, function(items) {
         var gits = items.git.split(",");
         for (i = 0; i < gits.length; i++) {
-            // Popular repos created within last month.
-            getTrendingByKeywords(gits[i], 30, 15);
+            // Popular repos created within last 30 days.
+            getTrendingByKeywordsGit(gits[i], 30, numEntries);
         }
   });
 }
 
 // Popular repos created within last 7 days.
-getTrendingByKeywords("", 7, 15)
-loadOptions()
+getTrendingByKeywordsGit("", 7, 10);
+loadOptionsGit(10);

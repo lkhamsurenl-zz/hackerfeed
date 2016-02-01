@@ -30,12 +30,12 @@ function generateItems(data) {
     return items;
 }
 
-function getArxivComponentByKeyword(keyword, limit) {
-    // Most recent limit papers.
+function getArxivComponentByKeyword(keyword, numEntries) {
+    // Most recent numEntries papers.
     $.ajax({
         url: "http://export.arxiv.org/api/query?search_query=cat:" + keyword + 
             "&sortBy=lastUpdatedDate&sortOrder=descending&start=0&max_results="+ 
-            limit,
+            numEntries,
         type: "GET",
         dataType: "html",
             success: function(data) {
@@ -49,16 +49,16 @@ function getArxivComponentByKeyword(keyword, limit) {
 
 
 // Get list of arxiv componenets to load from storage.
-function loadArxivOptions() {
+function loadArxivOptions(numEntries) {
   // Use default value subreddits: "".
   chrome.storage.sync.get({
     arxiv: "",
     }, function(items) {
         var arxivComponents = items.arxiv.split(",");
         for (i = 0; i < arxivComponents.length; i++) {
-            getArxivComponentByKeyword(arxivComponents[i], 15);
+            getArxivComponentByKeyword(arxivComponents[i], numEntries);
         }
   });
 }
 
-loadArxivOptions();
+loadArxivOptions(10);

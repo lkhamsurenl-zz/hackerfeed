@@ -20,7 +20,7 @@ function renderHN(items) {
 }
 
 // get story for an individual item based on the id, then callback.
-function getStory(id, callback) {
+function getStoryHN(id, callback) {
     var xmlhttp = new XMLHttpRequest();
 
     xmlhttp.onreadystatechange = function() {
@@ -36,10 +36,10 @@ function getStory(id, callback) {
     xmlhttp.send();
 }
 
-function topStories(items) {
+function topStoriesHN(items) {
     var stories = [];
     for (i = 0; i < items.length; i++) {
-        getStory(items[i], function(obj){
+        getStoryHN(items[i], function(obj){
             // given a obj, it pushes it into the value before rendering.
             stories[stories.length] = obj;
             if (stories.length == items.length) {
@@ -49,15 +49,16 @@ function topStories(items) {
     }
 }
 
-// function to make API call to url and display top limit results.
-function callAPI(limit) {
+// function to make API call to url and display top numEntries results.
+function callApiHN(numEntries) {
     var xmlhttp = new XMLHttpRequest();
 
     xmlhttp.onreadystatechange = function() {
         // if the request succeed, display the top requests.
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             // Display in the trends paragraph in popup.html page.
-            topStories(JSON.parse(xmlhttp.responseText).slice(0, limit));
+
+            topStoriesHN(JSON.parse(xmlhttp.responseText).slice(0, numEntries));
         }
     };
     
@@ -65,5 +66,6 @@ function callAPI(limit) {
     xmlhttp.send();
 }
 
-// Popular 15 stories.
-callAPI(15);
+console.log("HN ");
+// Popular numEntries stories.
+callApiHN(10);

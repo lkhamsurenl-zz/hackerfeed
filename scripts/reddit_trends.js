@@ -21,30 +21,30 @@ function renderReddit(subreddit, items) {
     document.getElementById("reddit_trends").innerHTML += links;
 }
 
-// Return first limit items that are above minScore threshold. 
-function filterTopItems(items, limit, minScore) {
+// Return first numEntries items that are above minScore threshold. 
+function filterTopItemsReddit(items, numEntries, minScore) {
     var topItems = [];
     for (i = 0; i < items.length; i++) {
         if (items[i]["data"]["score"] >= minScore) {
             topItems[topItems.length] = items[i];
         }
-        // Done collecting limit number of items.
-        if (topItems.length == limit) break;
+        // Done collecting numEntries number of items.
+        if (topItems.length == numEntries) break;
     }
     return topItems;
 }
 
-// function to make API call to url and display top limit results.
-function callAPI(subreddit, limit) {
+// function to make API call to url and display top numEntries results.
+function callAPIReddit(subreddit, numEntries) {
     var xmlhttp = new XMLHttpRequest();
 
     xmlhttp.onreadystatechange = function() {
         // if the request succeed, display the top requests.
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             // Filter out items score less than 3.
-            topItems = filterTopItems(
+            topItems = filterTopItemsReddit(
                 JSON.parse(xmlhttp.responseText)["data"]["children"], 
-                limit, 3);
+                numEntries, 3);
             // Display in the trends paragraph in popup.html page.
             renderReddit(subreddit, topItems);
         }
@@ -57,16 +57,16 @@ function callAPI(subreddit, limit) {
 }
 
 // Get list of subreddits to load from storage.
-function read_options() {
+function read_options(numEntries) {
   // Use default value subreddits: "".
   chrome.storage.sync.get({
     subreddit: "",
     }, function(items) {
         var subreddits = items.subreddit.split(",");
         for (i = 0; i < subreddits.length; i++) {
-            callAPI(subreddits[i], 15);
+            callAPIReddit(subreddits[i], numEntries);
         }
   });
 }
 
-read_options()
+read_options(10);
