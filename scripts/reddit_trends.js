@@ -62,6 +62,9 @@ function read_options(numEntries) {
   chrome.storage.sync.get({
     subreddit: "",
     }, function(items) {
+        if (items.subreddit == "") {
+            return;
+        }
         var subreddits = items.subreddit.split(",");
         for (i = 0; i < subreddits.length; i++) {
             callAPIReddit(subreddits[i], numEntries);

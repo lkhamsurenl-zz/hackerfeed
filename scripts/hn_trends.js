@@ -7,6 +7,11 @@ function renderHN(items) {
         url = item["url"] == "" || typeof item["url"] === "undefined" ? 
             ("https://news.ycombinator.com/item?id=" + item["id"]) :
             item["url"];
+        // NOTE: Following filters out all the HN links hosted on:
+        // news.ycombinator.com (This is useful when blocked access to the site)
+        if (url.indexOf("news.ycombinator.com") > -1) {
+            return true;
+        }
         title = item["title"];
         score = item["score"]
         links += "<li><a href=" + url + ">" + 
@@ -66,6 +71,5 @@ function callApiHN(numEntries) {
     xmlhttp.send();
 }
 
-console.log("HN ");
 // Popular numEntries stories.
 callApiHN(10);
