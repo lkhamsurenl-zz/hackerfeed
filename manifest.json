@@ -1,5 +1,6 @@
 {
   "name": "HackerFeed",
+  "short_name": "HackerFeed",
   "version": "0.2",
   "manifest_version": 2,
   "icons": {
