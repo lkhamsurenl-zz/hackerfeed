@@ -109,7 +109,9 @@ function loadOptionsGit(numEntries) {
         var gits = items.git.split(",");
         for (i = 0; i < gits.length; i++) {
             // Popular repos created within last 30 days.
-            getTrendingByKeywordsGit(gits[i], 30, numEntries);
+            if (gits[i] != "") {
+                getTrendingByKeywordsGit(gits[i], 30, numEntries);
+            }
         }
   });
 }
